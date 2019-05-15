@@ -1,6 +1,11 @@
 import React, {Component} from 'react';
+import TaskItem from './TaskItem';
 class List extends Component {
     render() {
+        var {tasks} = this.props;
+        var elementtasks = tasks.map((tasks, index)=>{
+            return <TaskItem key={tasks.id} index ={index} tasks={tasks}/>;
+        });
         return (
     		<table className="table table-horver">
                 <thead>
@@ -31,15 +36,7 @@ class List extends Component {
                         </td>
                         <td></td>
                     </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>name</td>
-                        <td>status</td>
-                        <td>
-                            <button type="button" className="btn btn-warning">Edit</button> &nbsp;
-                            <button type="button" className="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
+                    {elementtasks}
                 </tbody>
             </table>
         );
