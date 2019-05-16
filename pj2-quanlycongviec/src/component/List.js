@@ -4,7 +4,12 @@ class List extends Component {
     render() {
         var {tasks} = this.props;
         var elementtasks = tasks.map((tasks, index)=>{
-            return <TaskItem key={tasks.id} index ={index} tasks={tasks}/>;
+            return <TaskItem
+                key={tasks.id}
+                index ={index}
+                tasks={tasks}
+                onUpdateStatus={this.props.onUpdateStatus}
+            />;
         });
         return (
     		<table className="table table-horver">

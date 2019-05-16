@@ -79,6 +79,32 @@ class App extends Component {
         });
         localStorage.setItem('tasks', JSON.stringify(tasks));
     }
+
+    // update
+    onUpdateStatus = (id)=>{
+        var {tasks} = this.state;
+        var index = this.findIndex(id);
+        if (index !== -1){
+            tasks[index].status = !tasks[index].status;
+            this.setState({
+                tasks : tasks
+            });
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+        }
+    }
+
+    findIndex(id){
+        var {tasks } = this.state;
+        var result = -1;
+        tasks.forEach((tasks, index) => {
+            if (tasks.id === id)
+            {
+                result = index;
+            }
+        });
+        return result;
+    }
+
     render() {
         var {tasks, isDisplayForm} = this.state;
         var elmTasksForm = isDisplayForm === true
@@ -122,7 +148,7 @@ class App extends Component {
                         <Controll/>
                         {/* table*/}
                         <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <List tasks={tasks}/>
+                            <List tasks={tasks} onUpdateStatus={this.onUpdateStatus}/>
                         </div>
                     </div>
                 </div>
