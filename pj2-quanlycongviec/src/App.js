@@ -7,7 +7,8 @@ class App extends Component {
     constructor(props){
         super(props);
         this.state = {
-            tasks:[]
+            tasks:[],
+            isDisplayForm:false
         };
     }
     // dc goi thi gan vao state, goi duy nhat 1 lan
@@ -19,6 +20,7 @@ class App extends Component {
             });
         }
     }
+
 
     onGenerateData = () => {
         var tasks = [
@@ -49,25 +51,42 @@ class App extends Component {
         //luu tru vao storage kieu string (Json.stringify)
         localStorage.setItem('tasks', JSON.stringify(tasks));
     }
+
+    // dóng mở  form
+    onToggleForm = () =>{
+        this.setState(({
+            isDisplayForm:!this.state.isDisplayForm
+        }));
+    }
+
+    onCloseForm = () => {
+        this.setState(({
+            isDisplayForm:false
+        }));
+    }
     render() {
-        var {tasks} = this.state;
+        var {tasks, isDisplayForm} = this.state;
+        var elmTasksForm = isDisplayForm === true?<TaskForm onCloseForm={this.onCloseForm}/>:'';
         return (
             <div className="container">
                 <div className="text-center">
                     <h1>Manager Task</h1>
                 </div>
                 <div className="row">
-                    <TaskForm />
-                    <div className="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                    <div className={isDisplayForm === true ? 'col-xs-4 col-sm-4 col-md-4 col-lg-4':''}>
+                        {elmTasksForm}
+                    </div>
+                    <div className={isDisplayForm === true ? 'col-xs-8 col-sm-8 col-md-8 col-lg-8':'col-xs-12 col-sm-12 col-md-12 col-lg-12'}>
                         <form action="">
                             {/*button Add*/}
                             <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <button
                                     type="button"
                                     className="btn btn-primary"
+                                    onClick={this.onToggleForm}
                                 >
-                                    Add Task &nbsp;&nbsp;
-                                    <span className={'glyphicon glyphicon-plus mg-l'}/>
+                                    {isDisplayForm === true?'Close Form Task':'Add Task'} &nbsp;&nbsp;
+                                    <span className={isDisplayForm === true?'glyphicon glyphicon-minus':'glyphicon glyphicon-plus mg-l'}/>
                                 </button>
                                 &nbsp;
                                 <button
