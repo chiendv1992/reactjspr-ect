@@ -2,8 +2,46 @@ import React, {Component} from 'react';
 
 class TaskForm extends Component {
 
+    constructor(props){
+        super(props);
+        this.state = {
+            name:'',
+            status: false
+        };
+    }
+
     onCloseForm = () =>{
         this.props.onCloseForm();
+    }
+
+    onChange =(event) =>{
+        var target = event.target;
+        var name = target.name;
+        var value = target.value;
+        if (name === 'status'){
+            value = target.value === 'true' ? true : false;
+        }
+        this.setState({
+            [name]:value
+        });
+    }
+
+    // truyen data sang App
+    onSubmit = (event) => {
+        event.preventDefault();
+        this.props.onSubmit(this.state);
+        // cennel and close form
+        this.onClear();
+        this.onCloseForm();
+
+    }
+
+    // xoa data trong form(
+    onClear =() =>{
+        this.setState({
+            name : "",
+            status:false
+        });
     }
     render() {
         return (
@@ -15,21 +53,39 @@ class TaskForm extends Component {
                     </h3>
                 </div>
                 <div className="panel-body">
-                    <form action="" method="POST">
+                    <form onSubmit={this.onSubmit}>
                         <div className="form-group">
                             <label>Name :</label>
-                            <input type="text" className="form-control" id="" placeholder="Input field"/>
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Input Name"
+                                name='name'
+                                value={this.state.name}
+                                onChange={this.onChange}
+                            />
                         </div>
                         <div className="form-group">
                             <label htmlFor="">Status :</label>
-                            <select name="" id="input" className="form-control" required="required">
-                                <option value="">Enable</option>
-                                <option value="">Disable</option>
+                            <select
+                                name='status'
+                                onChange={this.onChange}
+                                className="form-control"
+                                value={this.state.status}
+                            >
+                                <option value={true}>Enable</option>
+                                <option value={false}>Disable</option>
                             </select>
                         </div>
                         <button type="submit" className="btn btn-primary">Save</button>
                         &nbsp;
-                        <button type="submit" className="btn btn-danger">cancel</button>
+                        <button
+                            type="submit"
+                            className="btn btn-danger"
+                            onClick={this.onClear}
+                        >
+                            cancel
+                        </button>
                     </form>
                 </div>
             </div>
