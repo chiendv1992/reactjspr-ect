@@ -9,6 +9,7 @@ class List extends Component {
                 index ={index}
                 tasks={tasks}
                 onUpdateStatus={this.props.onUpdateStatus}
+                onDelete = {this.props.onDelete}
             />;
         });
         return (

@@ -9,7 +9,7 @@ class App extends Component {
         super(props);
         this.state = {
             tasks: [],
-            isDisplayForm: false
+            isDisplayForm: true
         };
     }
 
@@ -56,9 +56,9 @@ class App extends Component {
 
     // dóng mở  form
     onToggleForm = () => {
-        this.setState(({
+        this.setState({
             isDisplayForm: !this.state.isDisplayForm
-        }));
+        });
     }
 
     // nut close form
@@ -68,11 +68,20 @@ class App extends Component {
         }));
     }
 
-// lay data tu TaskForm
+    makeid(length) {
+        var result           = '';
+        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for ( var i = 0; i < length; i++ ) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+    }
+    // lay data tu TaskForm
     onSubmit = (data) =>{
-        // console.log(data);
+        // console.log(this.makeid(10));
         var {tasks} = this.state; //this.state.tasks
-        data.id = 5;
+        data.id = this.makeid(10);
         tasks.push(data);
         this.setState({
             tasks : tasks
@@ -105,11 +114,27 @@ class App extends Component {
         return result;
     }
 
+    // delete dc lay id tu thang con
+    onDelete = (id) =>{
+        var {tasks} = this.state;
+        var index = this.findIndex(id);
+        if (index !== -1){
+            // xoa phan tu co index va so luong phan tu co the dung unshift
+            tasks.splice(index, 1);
+            // tasks.unshift();
+            this.setState({
+                tasks : tasks
+            });
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+        }
+        this.onCloseForm();
+    }
+
     render() {
         var {tasks, isDisplayForm} = this.state;
         var elmTasksForm = isDisplayForm === true
             ? <TaskForm
-                onCloseForm={this.onCloseForm}
+                onCloseForm = {this.onCloseForm}
                 onSubmit = {this.onSubmit}
             />
             : '';
@@ -134,7 +159,10 @@ class App extends Component {
                             >
                                 {isDisplayForm === true ? 'Close Form Task' : 'Add Task'} &nbsp;&nbsp;
                                 <span
-                                    className={isDisplayForm === true ? 'glyphicon glyphicon-minus' : 'glyphicon glyphicon-plus mg-l'}/>
+                                    className={isDisplayForm === true
+                                        ? 'glyphicon glyphicon-minus'
+                                        : 'glyphicon glyphicon-plus mg-l'}
+                                />
                             </button>
                             &nbsp;
                             {/*<button*/}
@@ -148,7 +176,11 @@ class App extends Component {
                         <Controll/>
                         {/* table*/}
                         <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <List tasks={tasks} onUpdateStatus={this.onUpdateStatus}/>
+                            <List
+                                tasks={tasks}
+                                onUpdateStatus={this.onUpdateStatus}
+                                onDelete={this.onDelete}
+                            />
                         </div>
                     </div>
                 </div>
